@@ -101,6 +101,9 @@
         return shape(true, true, true, true, false, true, true);
     }
 
+    // Return
+    return 0;
+
   }
 
 //============================================================
@@ -114,7 +117,6 @@
 
     // Loop Through All Segments
     for(int i=0; i<7; i++) {
-
       // Loop Within The segment Pixels
       for(int j = digit.segments[i].start; j < digit.segments[i].stop; j++) {
         if(bitRead(shape, i) == 1) {
@@ -123,8 +125,7 @@
           pixels.setPixelColor(j, pixels.Color(0, 0, 0));
         }
       }
-
-    }    
+    }
 
   }
 

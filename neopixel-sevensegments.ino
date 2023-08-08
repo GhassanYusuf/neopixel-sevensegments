@@ -5,13 +5,13 @@
   // Library
   #include <Adafruit_NeoPixel.h>
 
-  // AVR  
+  // AVR
   #ifdef __AVR__
     #include <avr/power.h> // Required for 16 MHz Adafruit Trinket
   #endif
 
   // Main Settings Of The Strip
-  #define PIN         15  // Pin Number On the Microcontroller
+  #define PIN         D5  // Pin Number On the Microcontroller
   #define NUMPIXELS   98  // Number Of Led's On the Strip
   #define NUMDIGITS   2   // The Number Of Digit Units Created From LED Strip
 
@@ -31,7 +31,7 @@
     uint8_t stop;
   };
 
-  // Digits 
+  // Digits
   struct Digit {
     SegmentPixelSize segments[7];
   };
@@ -79,7 +79,9 @@
       while(Serial.available()) Serial.read();
       x.trim();
       pixels.clear();
-      write(shapeNumber(x.toInt()), 80, 255, 0, 0);
+      uint8_t myDigit = x.toInt();
+      writeShape(digit[0], digitToShape(myDigit), 80, 255, 0, 0);
+      show();
     }
 
   }
