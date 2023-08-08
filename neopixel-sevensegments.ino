@@ -1,5 +1,5 @@
 //============================================================
-// Neo Pixel Strip Libraris
+//  Neo Pixel Strip Libraris
 //============================================================
   
   // Library
@@ -22,7 +22,7 @@
   Adafruit_NeoPixel   pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 
 //------------------------------------------------------------
-// Seven Segments Settings
+//  Seven Segments Settings
 //------------------------------------------------------------
 
   // Structure Of Segment LED Pixel Types
@@ -40,13 +40,16 @@
   Digit digit[NUMDIGITS];
 
 //============================================================
-// Setup
+//  Setup
 //============================================================
 
   void setup() {
 
     // Start Serial
     Serial.begin(9600);
+
+    // Serial New Line
+    Serial.println(); Serial.println();
 
     // Make Sure It Works
     #if defined(__AVR_ATtiny85__) && (F_CPU == 16000000)
@@ -68,24 +71,29 @@
   }
 
 //============================================================
-// Loop
+//  Loop
 //============================================================
 
   void loop() {
 
     // Serial Command
     if(Serial.available()) {
+      // String Data
       String x = Serial.readStringUntil('\n');
+      // Clear Remaining Data
       while(Serial.available()) Serial.read();
+      // Clear Data From
       x.trim();
+      // Clear Data On Pixel Strips
       pixels.clear();
-      uint8_t myDigit = x.toInt();
-      writeShape(digit[0], digitToShape(myDigit), 80, 255, 0, 0);
+      // Send Data To Neo Pixel
+      writeNumber(x.toInt(), 100, 255, 0, 0);
+      // Command Neo Pixel To Show
       show();
     }
 
   }
 
 //============================================================
-// Enable The Segments
+//  Enable The Segments
 //============================================================

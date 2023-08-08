@@ -1,5 +1,5 @@
 //============================================================
-// Setup Digit
+//  Setup Digit
 //============================================================
 
   void setupSSDisplay(Digit *number) {
@@ -13,26 +13,21 @@
 
     // Loop Through Digits
     for(int i=0; i<NUMDIGITS; i++) {
-
       // Main Assign Loop Segment 1
       for(uint8_t j=0; j<SEGSIZE; j++) {
-
         // Display Segments
         Serial.println(" -> [" + String(i+1) + "] Start Position " + String(start_position) + ", End Position " + String(stop_position));
-
         digit[i].segments[j].start = start_position;
         digit[i].segments[j].stop  = stop_position;
         start_position = start_position + SEGSIZE;
         stop_position = start_position + SEGSIZE;
-
       }
-
     }
 
   }
 
 //============================================================
-// Write The Number To The Segment
+//  Write The Number To The Segment
 //============================================================
 
   void writeNumber(unsigned int number, uint8_t brightness, uint8_t r, uint8_t g, uint8_t b) {
@@ -46,7 +41,7 @@
   }
 
 //============================================================
-// Enable The Segments
+//  Enable The Segments
 //============================================================
 
   uint8_t shape(bool a, bool b, bool c, bool d, bool e, bool f, bool g) {
@@ -69,7 +64,7 @@
   }
 
 //============================================================
-// DigitToShape
+//  DigitToShape
 //============================================================
 
   uint8_t digitToShape(uint8_t number) {
@@ -107,7 +102,7 @@
   }
 
 //============================================================
-// Write Shape To Display
+//  Write Shape To Display
 //============================================================
 
   void writeShape(Digit &digit, uint8_t shape, uint8_t brightness, uint8_t r, uint8_t g, uint8_t b) {
@@ -119,6 +114,7 @@
     for(int i=0; i<7; i++) {
       // Loop Within The segment Pixels
       for(int j = digit.segments[i].start; j < digit.segments[i].stop; j++) {
+        // Put Colors
         if(bitRead(shape, i) == 1) {
           pixels.setPixelColor(j, pixels.Color(r, g, b));
         } else {
@@ -130,7 +126,7 @@
   }
 
 //============================================================
-// Write Single Segment
+//  Write Single Segment
 //============================================================
 
   void writeOneSegment(Digit &digit, uint8_t segment, uint8_t brightness, uint8_t r, uint8_t g, uint8_t b) {
@@ -146,21 +142,23 @@
   }
 
 //============================================================
-// Clearing The Display
+//  Clearing The Display
 //============================================================
 
   void clear() {
 
+    // Clear Pixels
     pixels.clear();
 
   }
 
 //============================================================
-// Show The Display
+//  Show The Display
 //============================================================
 
   void show() {
 
+    // Show Pixels
     pixels.show();
 
   }
