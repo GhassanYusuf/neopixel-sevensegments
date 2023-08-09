@@ -114,12 +114,17 @@
     for(int i=0; i<7; i++) {
       // Loop Within The segment Pixels
       for(int j = digit.segments[i].start; j < digit.segments[i].stop; j++) {
+
         // Put Colors
         if(bitRead(shape, i) == 1) {
           pixels.setPixelColor(j, pixels.Color(r, g, b));
-        } else {
+        }
+
+        // If Not
+        else {
           pixels.setPixelColor(j, pixels.Color(0, 0, 0));
         }
+
       }
     }
 
@@ -162,3 +167,39 @@
     pixels.show();
 
   }
+
+//============================================================
+//  Rainbow Seven Segment
+//============================================================
+
+  // Rainbow effect for a seven-segment display. Pass delay time (in ms) between frames.
+  void rainbowSevenSegment(Digit *_digit, uint8_t segment) {
+
+    // Loop to display the numbers
+    for(int i=0; i<NUMDIGITS; i++) {
+      writeShape(_digit[i], digitToShape(number % 10), brightness, r, g, b);
+      number /= 10;
+    }
+
+    for (long firstPixelHue = 0; firstPixelHue < 5 * 65536; firstPixelHue += 256) {
+
+      for(int j = digit.segments[segment].start; j < digit.segments[segment].stop; j++) {
+        
+        // Set the color of each segment
+        uint32_t color = pixels.gamma32(pixels.ColorHSV(firstPixelHue + (j * 65536 / 7)));
+
+        // Set the color of each segment
+        pixels.setPixelColor(j, color);
+
+      }
+
+      pixels.show();
+      delay(10);
+
+    }
+
+  }
+
+//============================================================
+//  End Of Functions
+//============================================================

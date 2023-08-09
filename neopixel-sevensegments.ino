@@ -68,6 +68,9 @@
     // Display
     pixels.show();
 
+    // Rainbow
+    // rainbowSevenSegment(digit[0], 0);
+
   }
 
 //============================================================
