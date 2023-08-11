@@ -2,6 +2,29 @@
 //  Setup Digit
 //============================================================
 
+  void initialize() {
+    
+    // Start Neo Pixel
+    setupSSDisplay(digit);
+
+    // Start Pixels
+    pixels.begin();
+
+    // Clearing Pixels
+    pixels.clear();
+
+    // Display
+    pixels.show();
+
+    // Waiting
+    waiting();
+
+  }
+
+//============================================================
+//  Setup Digit
+//============================================================
+
   void setupSSDisplay(Digit *number) {
     
     // Display Size Of The Seven Segment
@@ -33,9 +56,11 @@
   void writeNumber(unsigned int number, uint8_t brightness, uint8_t r, uint8_t g, uint8_t b) {
 
     // Loop to display the numbers
-    for(int i=0; i<NUMDIGITS; i++) {
+    for(int i=NUMDIGITS-1; i>=0; i--) {
+
       writeShape(digit[i], digitToShape(number % 10), brightness, r, g, b);
       number /= 10;
+
     }
 
   }
@@ -173,30 +198,169 @@
 //============================================================
 
   // Rainbow effect for a seven-segment display. Pass delay time (in ms) between frames.
-  void rainbowSevenSegment(Digit *_digit, uint8_t segment) {
+  // void rainbowSevenSegment(Digit &digit, uint8_t number) {
 
-    // Loop to display the numbers
-    for(int i=0; i<NUMDIGITS; i++) {
-      writeShape(_digit[i], digitToShape(number % 10), brightness, r, g, b);
-      number /= 10;
-    }
+  //   // Loop to display the numbers
+  //   // for(int i=0; i<NUMDIGITS; i++) {
+  //   //   writeShape(_digit[i], digitToShape(number % 10), brightness, r, g, b);
+  //   //   number /= 10;
+  //   // }
+  //   pixels.clear();
 
-    for (long firstPixelHue = 0; firstPixelHue < 5 * 65536; firstPixelHue += 256) {
+  //   for (long firstPixelHue = 0; firstPixelHue < 5 * 65536; firstPixelHue += 256) {
 
-      for(int j = digit.segments[segment].start; j < digit.segments[segment].stop; j++) {
+  //     // Display
+  //     for(int j = digit.segments[segment].start; j < digit.segments[segment].stop; j++) {
         
-        // Set the color of each segment
-        uint32_t color = pixels.gamma32(pixels.ColorHSV(firstPixelHue + (j * 65536 / 7)));
+  //       // Set the color of each segment
+  //       uint32_t color = pixels.gamma32(pixels.ColorHSV(firstPixelHue + (j * 65536 / 7)));
 
-        // Set the color of each segment
-        pixels.setPixelColor(j, color);
+  //       // Set the color of each segment
+  //       pixels.setPixelColor(j, color);
 
-      }
+  //     }
 
-      pixels.show();
-      delay(10);
+  //     // Show
+  //     pixels.show();
 
+  //     // Waiting
+  //     delay(7);
+
+  //   }
+
+  // }
+
+//============================================================
+//  Minus Number
+//============================================================
+
+  void minus(uint8_t points) {
+
+    // Build Shape For Point
+    uint8_t number  = digitToShape(points);
+
+    // To Write - Sign shape
+    uint8_t sign    = shape(false, false, false, false, false, false, true);
+
+    // Minus Sign Written
+    writeShape(digit[0], sign, 100, referee.r, referee.g, referee.b);
+
+    // Showing
+    writeShape(digit[1], number, 100, referee.r, referee.g, referee.b);
+
+  }
+
+//============================================================
+//  Waiting Number
+//============================================================
+
+  void waiting() {
+
+    // writeNumber(0, 1, 255, 255, 255);
+    writeShape(digit[0], shape(false, false, false, false, false, false, true), 1, 255, 255, 255);
+    writeShape(digit[1], shape(false, false, false, false, false, false, true), 1, 255, 255, 255);
+
+    // Cross Fade
+    for(int times=0; times<3; times++) {
+      crossfade(1);
     }
+
+    // Clear The Display
+    writeShape(digit[0], shape(false, false, false, false, false, false, false), 100, 255, 255, 255);
+    writeShape(digit[1], shape(false, false, false, false, false, false, false), 100, 255, 255, 255);
+
+    // Show
+    show();
+
+  }
+
+//============================================================
+//  End Of Functions
+//============================================================
+
+  void crossfade(int cfdelay) {
+
+    // Fade In
+    fadein(cfdelay);
+    // Fade Out
+    fadeout(cfdelay);
+
+  }
+
+//============================================================
+//  End Of Functions
+//============================================================
+
+  void fadein(int fdelay) {
+
+    for(int i=1; i<255; i++) {
+      pixels.setBrightness(i);
+      show();
+      delay(fdelay);
+    }
+
+  }
+
+//============================================================
+//  End Of Functions
+//============================================================
+
+  void fadeout(int fdelay) {
+
+    for(int i=255; i>=1; i--) {
+      pixels.setBrightness(i);
+      show();
+      delay(fdelay);
+    }
+
+  }
+
+//============================================================
+//  Add Point
+//============================================================
+
+  void addPoint(uint8_t points) {
+
+    // Update The Score
+    score = points;
+
+    // Clear Data On Pixel Strips
+    pixels.clear();
+    
+    // Send Data To Neo Pixel
+    writeNumber(score, 100, participant.r, participant.g, participant.b);
+
+    // Command Neo Pixel To Show
+    show();
+
+  }
+
+//============================================================
+//  Sub Point
+//============================================================
+
+  void subPoint(uint8_t points) {
+
+    // Display The Minus Magnitude Sign
+    minus(score - points);
+
+    // Update The Score
+    score = points;
+
+    // Show Display
+    show();
+
+    // Wait For The Number
+    delay(800);
+
+    // Clear Data On Pixel Strips
+    pixels.clear();
+    
+    // Send Data To Neo Pixel
+    writeNumber(score, 100, participant.r, participant.g, participant.b);
+
+    // Command Neo Pixel To Show
+    show();
 
   }
 
